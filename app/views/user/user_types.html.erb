@@ -1,5 +1,25 @@
-<form>
-  <input type="radio" name="recruiter" value="Recruiter">Recruiter<br>
-  <input type="radio" name="candidate" value="candidate">Candidate<br>
-  <input type="button" name="userTypeButton" value="Submit">
-</form>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>User Type</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+</head>
+
+<body>
+  <div id="dialog-form" title="Select User Type">
+  <form>
+  <fieldset>
+    <p>What type of user are you?</p>
+    <p>
+      <input type="radio" name="userTypeGroup" value="Recruiter">Recruiter<br>
+      <input type="radio" name="userTypeGroup" value="candidate">Candidate<br>
+    </p>
+  </fieldset>
+  </form>
+</div>
+
+
+</body>
+</html>

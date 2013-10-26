@@ -14,3 +14,31 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require jquery.ui.all
+$(function() {
+
+  $( "#dialog-form" ).dialog({
+    autoOpen: true,
+    height: 300,
+    width: 350,
+    modal: true,
+    buttons: {
+      "Submit": function() {
+        var bValid = false;
+
+        if ( bValid ) {
+          $( "#users tbody" ).append( "<tr>" +
+            "<td>" + name.val() + "</td>" +
+            "<td>" + email.val() + "</td>" +
+            "<td>" + password.val() + "</td>" +
+          "</tr>" );
+          $( this ).dialog( "close" );
+        }
+      }
+    },
+    close: function() {
+      allFields.val( "" ).removeClass( "ui-state-error" );
+    }
+  });
+
+});
