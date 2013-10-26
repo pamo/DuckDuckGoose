@@ -24,15 +24,13 @@ $(function() {
     modal: true,
     buttons: {
       "Submit": function() {
-        var bValid = false;
-
-        if ( bValid ) {
-          $( "#users tbody" ).append( "<tr>" +
-            "<td>" + name.val() + "</td>" +
-            "<td>" + email.val() + "</td>" +
-            "<td>" + password.val() + "</td>" +
-          "</tr>" );
-          $( this ).dialog( "close" );
+        var isRecruiter = $('#recruiter').prop('checked'),
+            isCandidate = $('#candidate').prop('checked');
+        
+        if (isRecruiter || isCandidate) {
+            document.location.href = '/questions';
+        } else {
+           window.alert('Need to choose either candidate or recruiter'); 
         }
       }
     },
