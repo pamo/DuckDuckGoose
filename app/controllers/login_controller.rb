@@ -31,6 +31,8 @@ class LoginController < ApplicationController
     @profile = client.profile
     @positions = client.profile(:fields => %w(positions)).positions
     @companies = @positions.all.map{|t| t.company.name}
+    @industries = @positions.all.map{|t| t.company.industry}
+    @latest_industry = @industries.first
 
 
   end
