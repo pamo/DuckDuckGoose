@@ -23,7 +23,7 @@ class LoginController < ApplicationController
 
   def authorize
     #Redirect your user in order to authenticate
-    redirect_to client.auth_code.authorize_url(:scope => 'r_fullprofile r_emailaddress r_network', 
+    redirect_to client.auth_code.authorize_url(:scope => 'r_fullprofile r_emailaddress r_network w_messages r_contactinfo r_basicprofile', 
                                                :state => STATE, 
                                                :redirect_uri => REDIRECT_URI)
   end
