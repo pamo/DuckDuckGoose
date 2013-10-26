@@ -29,6 +29,10 @@ class LoginController < ApplicationController
       client.authorize_from_access(session[:atoken], session[:asecret])
     end
     @profile = client.profile
-  end
-end
+    @positions = client.profile(:fields => %w(positions)).positions
+    @companies = @positions.all.map{|t| t.company.name}
 
+
+  end
+
+end
