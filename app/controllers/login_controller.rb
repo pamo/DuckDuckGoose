@@ -4,6 +4,8 @@ class LoginController < ApplicationController
   
   API_KEY = 'em7a2uvkyb9u' #Your app's API key
   API_SECRET = 'ttemnMXrM9uCA0s8' #Your app's API secret
+  REDIRECT_URI = 'http://localhost:3000/accept' #Redirect user after authentication to this path, ensure that you have set up your routes to handle the callbacks
+  STATE = SecureRandom.hex(15) #A unique long string that is not easy to guess
   
   def index
     # get your api keys at https://www.linkedin.com/secure/developer

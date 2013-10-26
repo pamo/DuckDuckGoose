@@ -1,6 +1,7 @@
 DuckDuckGoose::Application.routes.draw do
   root 'login#index'
   get 'accept', to: 'login#accept'
+  get 'user_types', to: 'user#user_types'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
