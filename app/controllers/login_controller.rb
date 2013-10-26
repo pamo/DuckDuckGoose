@@ -1,14 +1,10 @@
-require 'oauth2'
 require 'linkedin'
 
 class LoginController < ApplicationController
   
   API_KEY = 'em7a2uvkyb9u' #Your app's API key
   API_SECRET = 'ttemnMXrM9uCA0s8' #Your app's API secret
-  REDIRECT_URI = 'http://localhost:3000/accept' #Redirect users after authentication to this path, ensure that you have set up your routes to handle the callbacks
-  STATE = SecureRandom.hex(15) #A unique long string that is not easy to guess
   
-  #Instantiate your OAuth2 client object
   def index
     # get your api keys at https://www.linkedin.com/secure/developer
     client = LinkedIn::Client.new(API_KEY, API_SECRET)
@@ -31,9 +27,6 @@ class LoginController < ApplicationController
       client.authorize_from_access(session[:atoken], session[:asecret])
     end
     @profile = client.profile
-    puts @profile
-    # @connections = client.connections
-    # puts @connections
   end
 end
 
