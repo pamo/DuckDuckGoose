@@ -1,4 +1,6 @@
 require 'oauth2'
+require 'linkedin'
+
 class LoginController < ApplicationController
   
   API_KEY = 'em7a2uvkyb9u' #Your app's API key
@@ -7,61 +9,31 @@ class LoginController < ApplicationController
   STATE = SecureRandom.hex(15) #A unique long string that is not easy to guess
   
   #Instantiate your OAuth2 client object
-  def client
-
-    OAuth2::Client.new(
-       API_KEY, 
-       API_SECRET, 
-       :authorize_url => "/uas/oauth2/authorization?response_type=code", #LinkedIn's authorization path
-       :token_url => "/uas/oauth2/accessToken", #LinkedIn's access token path
-       :site => "https://www.linkedin.com"
-     )
-  end
-  
   def index
-    authorize
+    # get your api keys at https://www.linkedin.com/secure/developer
+    client = LinkedIn::Client.new(API_KEY, API_SECRET)
+    request_token = client.request_token(:oauth_callback => "http://#{request.host_with_port}/accept")
+    session[:rtoken] = request_token.token
+    session[:rsecret] = request_token.secret
+
+    redirect_to client.request_token.authorize_url
+
   end
 
-  def authorize
-    #Redirect your user in order to authenticate
-    redirect_to client.auth_code.authorize_url(:scope => 'r_fullprofile r_emailaddress r_network w_messages r_contactinfo r_basicprofile', 
-                                               :state => STATE, 
-                                               :redirect_uri => REDIRECT_URI)
-  end
-
-  # This method will handle the callback once the user authorizes your application
   def accept
-      #Fetch the 'code' query parameter from the callback
-          code = params[:code] 
-          state = params[:state]
-          
-          if !state.eql?(STATE)
-             #Reject the request as it may be a result of CSRF
-          else           
-            #Get token object, passing in the authorization code from the previous step 
-            token = client.auth_code.get_token(code, :redirect_uri => REDIRECT_URI)
-          
-            #Use token object to create access token for user 
-            #(this is required so that you provide the correct param name for the access token)
-            access_token = OAuth2::AccessToken.new(client, token.token, {
-              :mode => :query,
-              :param_name => "oauth2_access_token",
-              })
-
-            #Use the access token to make an authenticated API call
-            response = access_token.get('https://api.linkedin.com/v1/people/~')
-
-            #Print body of response to command line window
-            puts response.body
-
-            # Handle HTTP responses
-            case response
-              when Net::HTTPUnauthorized
-                # Handle 401 Unauthorized response
-              when Net::HTTPForbidden
-                # Handle 403 Forbidden response
-            end
-        end
+    client = LinkedIn::Client.new(API_KEY, API_SECRET)
+    if session[:atoken].nil?
+      pin = params[:oauth_verifier]
+      atoken, asecret = client.authorize_from_request(session[:rtoken], session[:rsecret], pin)
+      session[:atoken] = atoken
+      session[:asecret] = asecret
+    else
+      client.authorize_from_access(session[:atoken], session[:asecret])
     end
- end
+    @profile = client.profile
+    puts @profile
+    # @connections = client.connections
+    # puts @connections
+  end
+end
 
