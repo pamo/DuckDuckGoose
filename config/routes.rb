@@ -1,4 +1,12 @@
 DuckDuckGoose::Application.routes.draw do
+  resources :criteria
+
+  resources :users
+
+  resources :answers
+
+  resources :questions
+
   root 'login#index'
   get 'accept', to: 'login#accept'
   get 'user_types', to: 'user#user_types'
